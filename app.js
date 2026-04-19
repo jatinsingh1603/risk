@@ -92,7 +92,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Navigation and Logic Routing
     document.getElementById("logo-action").addEventListener("click", () => setView("welcome"));
-    document.getElementById("mobile-logo-action").addEventListener("click", () => setView("welcome"));
+    const mobileLogo = document.getElementById("mobile-logo-action");
+    if (mobileLogo) mobileLogo.addEventListener("click", () => setView("welcome"));
+    
+    document.getElementById("btn-toggle-sidebar").addEventListener("click", () => {
+        document.body.classList.toggle("sidebar-open");
+    });
 
     // Dashboard View State Generator
     const renderGlobalDashboard = () => {
