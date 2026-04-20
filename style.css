@@ -42,6 +42,7 @@ body {
     background-color: var(--bg-main);
     color: var(--text-main);
     height: 100vh;
+    height: 100dvh;
     overflow: hidden;
     -webkit-font-smoothing: antialiased;
 }
@@ -54,6 +55,7 @@ h1, h2, h3, h4, .logo, .stat-value {
 .app-container {
     display: flex;
     height: 100vh;
+    height: 100dvh;
     width: 100vw;
 }
 
@@ -429,7 +431,7 @@ body:not(.sidebar-open) .sidebar {
     }
 
     /* Content & Cards */
-    .content-wrapper { padding: 20px; }
+    .content-wrapper { padding: 20px; padding-bottom: 80px; } /* Ensures safe area at bottom on mobile browsers */
     .top-nav { padding: 12px 20px; }
     .form-container-card { padding: 20px; }
     .welcome-box { margin-top: 20px; }
@@ -448,8 +450,9 @@ body:not(.sidebar-open) .sidebar {
     /* Actions & Tabs */
     .tabs { flex-wrap: wrap; }
     .tab { flex-grow: 1; min-width: 80px; padding: 12px; }
-    .form-actions { flex-direction: column; gap: 12px; }
-    .form-actions .btn { width: 100%; }
+    .form-actions { flex-direction: column; gap: 16px; padding-bottom: 24px; }
+    .form-actions .spacer { display: none; } /* Hide spacer to prevent phantom height stretch */
+    .form-actions .btn { width: 100%; min-height: 48px; } /* Extra tap target size */
     .badges-container { flex-wrap: wrap; }
     
     /* Modals */
