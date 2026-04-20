@@ -64,6 +64,9 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // Time-based greeting
+    // Mobile init
+    if (window.innerWidth < 768) { document.body.classList.remove("sidebar-open"); }
+
     const setGreeting = () => {
         const hour = new Date().getHours();
         const greetingEl = document.getElementById("welcome-greeting");
@@ -97,6 +100,17 @@ document.addEventListener("DOMContentLoaded", () => {
     
     document.getElementById("btn-toggle-sidebar").addEventListener("click", () => {
         document.body.classList.toggle("sidebar-open");
+    });
+
+    // Close sidebar on mobile when clicking outside
+    document.addEventListener("click", (e) => {
+        if (window.innerWidth < 768 && document.body.classList.contains("sidebar-open")) {
+            const sidebar = document.getElementById("sidebar");
+            const toggleBtn = document.getElementById("btn-toggle-sidebar");
+            if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+                document.body.classList.remove("sidebar-open");
+            }
+        }
     });
 
     // Dashboard View State Generator
@@ -667,7 +681,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         setView("vendor");
-        if (window.innerWidth < 768) { sidebar.style.transform = "translateX(-100%)"; }
+        if (window.innerWidth < 768) { document.body.classList.remove("sidebar-open"); }
     };
 
     // Boot routines
