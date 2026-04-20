@@ -449,6 +449,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
         Storage.saveAudit(audit);
 
+        // Webhook integration - fire and forget
+        try {
+            const webhookPayload = {
+                domain: currentDomain,
+                email: currentEmail,
+                results: {
+                    rawScores: rawScores,
+                    intelResult: intelResult,
+                    adjustedScore: audit.adjustedScore,
+                    finalGrade: ScoreEngine.grade(audit.adjustedScore)
+                },
+                questionsOpted: {}
+            };
+
+            // Map questions and selected options for the webhook payload
+            for (const section of TABS_ORDER) {
+                webhookPayload.questionsOpted[section] = [];
+                const secAnswers = formAnswers[section];
+                const secQuestions = QUESTIONS[section];
+                
+                secQuestions.forEach(q => {
+                    const ansKey = secAnswers[q.id];
+                    webhookPayload.questionsOpted[section].push({
+                        questionId: q.id,
+                        questionText: q.text,
+                        selectedOptionKey: ansKey || null,
+                        selectedOptionText: ansKey ? q.opts[ansKey] : null
+                    });
+                });
+            }
+
+            fetch('https://n8ntinycrows-djepemcqdub2bac7.centralindia-01.azurewebsites.net/webhook/corbit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(webhookPayload)
+            }).catch(e => console.error("Webhook error:", e));
+        } catch (e) {
+            console.error("Failed to map webhook data:", e);
+        }
+
         const fgGrade = ScoreEngine.grade(intelResult.adjustedScore);
         document.getElementById("success-message").innerHTML = `Audit for <strong>${currentDomain}</strong> has been saved successfully.<br>Final Network Grade: <strong>${intelResult.adjustedScore} / 5.0 — ${fgGrade}</strong>.`;
         
